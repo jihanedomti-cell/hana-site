@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { Package, RefreshCw, UserRound } from "lucide-react";
 
 import { LogoutButton } from "@/components/hana/logout-button";
@@ -22,7 +23,27 @@ const statutLabels: Record<string, string> = {
   annulee: "Annulée",
 };
 
-export default async function ComptePage() {
+/* Next 16 (Cache Components) : la lecture des cookies de session est
+   « dynamique » et doit vivre sous un <Suspense> pour que le build passe. */
+export default function ComptePage() {
+  return (
+    <Suspense
+      fallback={
+        <main>
+          <Section variant="creme" eyebrow="Mon espace" title="Un instant…">
+            <p className="text-sm text-espresso/60">
+              Chargement de votre espace personnel.
+            </p>
+          </Section>
+        </main>
+      }
+    >
+      <CompteContent />
+    </Suspense>
+  );
+}
+
+async function CompteContent() {
   const supabase = await createClient();
 
   // getClaims() — jamais getSession() (exigence du brief, et du template)
