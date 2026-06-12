@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   HANA — Design system
+   Palette : terracotta #B0563C · ambre #C99A4E · espresso #2E211C
+             crème #F7F1E8 · sauge #7E9688 · blanc #FFFFFF
+   Les variables shadcn/ui sont remappées sur la charte HANA.
+   ============================================================ */
+
+@layer base {
+  :root {
+    /* Fond crème, texte espresso */
+    --background: 36 48% 94%; /* crème #F7F1E8 */
+    --foreground: 17 24% 15%; /* espresso #2E211C */
+
+    /* Cartes blanches sur fond crème */
+    --card: 0 0% 100%;
+    --card-foreground: 17 24% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 17 24% 15%;
+
+    /* Terracotta = couleur principale (boutons, accents) */
+    --primary: 13 49% 46%; /* terracotta #B0563C */
+    --primary-foreground: 36 48% 96%;
+
+    /* Sauge = accent nature/responsable */
+    --secondary: 145 10% 54%; /* sauge #7E9688 */
+    --secondary-foreground: 17 24% 15%;
+
+    /* Tons feutrés dérivés de la crème */
+    --muted: 36 30% 88%;
+    --muted-foreground: 17 14% 38%;
+
+    /* Ambre = accent premium */
+    --accent: 37 53% 55%; /* ambre #C99A4E */
+    --accent-foreground: 17 24% 15%;
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 36 48% 96%;
+
+    --border: 30 25% 84%;
+    --input: 30 25% 84%;
+    --ring: 13 49% 46%;
+
+    --chart-1: 13 49% 46%;
+    --chart-2: 37 53% 55%;
+    --chart-3: 145 10% 54%;
+    --chart-4: 17 24% 15%;
+    --chart-5: 36 48% 94%;
+
+    --radius: 0.75rem;
+  }
+
+  /* Mode sombre : sections espresso (utilisé ponctuellement, le site reste clair) */
+  .dark {
+    --background: 17 24% 15%; /* espresso */
+    --foreground: 36 48% 94%; /* crème */
+    --card: 17 20% 19%;
+    --card-foreground: 36 48% 94%;
+    --popover: 17 20% 19%;
+    --popover-foreground: 36 48% 94%;
+    --primary: 13 52% 53%; /* terracotta légèrement éclairci sur fond sombre */
+    --primary-foreground: 36 48% 96%;
+    --secondary: 145 10% 44%;
+    --secondary-foreground: 36 48% 94%;
+    --muted: 17 18% 24%;
+    --muted-foreground: 36 25% 75%;
+    --accent: 37 53% 55%;
+    --accent-foreground: 17 24% 15%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 36 48% 96%;
+    --border: 17 16% 28%;
+    --input: 17 16% 28%;
+    --ring: 37 53% 55%;
+    --chart-1: 13 52% 53%;
+    --chart-2: 37 53% 55%;
+    --chart-3: 145 10% 54%;
+    --chart-4: 36 48% 94%;
+    --chart-5: 30 25% 84%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  /* Titres en serif par défaut */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif;
+  }
+}
