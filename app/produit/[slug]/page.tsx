@@ -5,6 +5,7 @@ import { MapPin, RefreshCw, Truck } from "lucide-react";
 
 import { ParfumSelector } from "@/components/hana/add-to-cart";
 import { PlaceholderImage } from "@/components/hana/placeholder-image";
+import { ReviewForm } from "@/components/hana/review-form";
 import { Section } from "@/components/hana/section";
 import { Stars } from "@/components/hana/stars";
 import { Badge } from "@/components/ui/badge";
@@ -169,9 +170,9 @@ export default async function ProduitPage({ params }: Props) {
       </Section>
 
       {/* ---- Avis ---- */}
-      {reviews.length > 0 && (
-        <Section variant="white" eyebrow="Elles en parlent" title="Les avis">
-          <div className="grid gap-6 md:grid-cols-3">
+      <Section variant="white" eyebrow="Elles en parlent" title="Les avis">
+        {reviews.length > 0 ? (
+          <div className="mb-10 grid gap-6 md:grid-cols-3">
             {reviews.map((r, i) => (
               <figure
                 key={`${r.prenom}-${i}`}
@@ -190,8 +191,15 @@ export default async function ProduitPage({ params }: Props) {
               </figure>
             ))}
           </div>
-        </Section>
-      )}
+        ) : (
+          <p className="mb-10 text-sm text-espresso/60">
+            Soyez la première à donner votre avis sur ce produit.
+          </p>
+        )}
+        <div className="max-w-xl">
+          <ReviewForm slug={product.slug} />
+        </div>
+      </Section>
     </main>
   );
 }

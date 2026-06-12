@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { Package, RefreshCw, UserRound } from "lucide-react";
 
 import { LogoutButton } from "@/components/hana/logout-button";
+import { ProfileForm } from "@/components/hana/profile-form";
 import { Section } from "@/components/hana/section";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
@@ -13,6 +14,21 @@ import { formatPrice } from "@/lib/format";
 export const metadata: Metadata = {
   title: "Mon compte",
   robots: { index: false },
+};
+
+type OrderItemRow = {
+  quantite: number;
+  prix: number;
+  products: { nom: string } | null;
+  product_variants: { parfum: string } | null;
+};
+
+type OrderRow = {
+  id: string;
+  statut: string;
+  total: number;
+  date: string;
+  order_items: OrderItemRow[];
 };
 
 const statutLabels: Record<string, string> = {
@@ -61,9 +77,12 @@ async function CompteContent() {
         .maybeSingle(),
       supabase
         .from("orders")
-        .select("id, statut, total, date")
+        .select(
+          "id, statut, total, date, order_items(quantite, prix, products(nom), product_variants(parfum))",
+        )
         .order("date", { ascending: false })
-        .limit(10),
+        .limit(10)
+        .returns<OrderRow[]>(),
       supabase
         .from("subscriptions")
         .select("type, statut, prochaine_recharge")
@@ -94,21 +113,14 @@ async function CompteContent() {
               </span>
               <h2 className="font-serif text-xl">Mon profil</h2>
             </div>
-            <dl className="space-y-2 text-sm">
-              <div>
-                <dt className="text-espresso/50">Prénom</dt>
-                <dd>{prenom ?? "—"}</dd>
-              </div>
-              <div>
-                <dt className="text-espresso/50">Email</dt>
-                <dd>{email}</dd>
-              </div>
-              <div>
-                <dt className="text-espresso/50">Ville</dt>
-                <dd>{profile?.ville ?? "—"}</dd>
-              </div>
-            </dl>
-            {/* TODO : formulaire d'édition du profil (prénom, ville) */}
+            <p className="mb-4 text-sm">
+              <span className="text-espresso/50">Email : </span>
+              {email}
+            </p>
+            <ProfileForm
+              initialPrenom={prenom ?? ""}
+              initialVille={profile?.ville ?? ""}
+            />
           </div>
 
           {/* ---- Commandes ---- */}
@@ -127,21 +139,37 @@ async function CompteContent() {
                 </Button>
               </div>
             ) : (
-              <ul className="space-y-3 text-sm">
+              <ul className="space-y-2 text-sm">
                 {orders.map((o) => (
-                  <li
-                    key={o.id}
-                    className="flex items-center justify-between gap-3 border-b border-espresso/5 pb-2"
-                  >
-                    <span className="text-espresso/70">
-                      {new Date(o.date).toLocaleDateString("fr-FR")}
-                    </span>
-                    <span className="rounded-full bg-creme px-2.5 py-0.5 text-xs">
-                      {statutLabels[o.statut] ?? o.statut}
-                    </span>
-                    <span className="font-medium text-terracotta">
-                      {formatPrice(Number(o.total))}
-                    </span>
+                  <li key={o.id}>
+                    <details className="group rounded-lg border border-espresso/5 p-3">
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+                        <span className="text-espresso/70">
+                          {new Date(o.date).toLocaleDateString("fr-FR")}
+                        </span>
+                        <span className="rounded-full bg-creme px-2.5 py-0.5 text-xs">
+                          {statutLabels[o.statut] ?? o.statut}
+                        </span>
+                        <span className="font-medium text-terracotta">
+                          {formatPrice(Number(o.total))}
+                        </span>
+                      </summary>
+                      <ul className="mt-3 space-y-1.5 border-t border-espresso/5 pt-3 text-xs text-espresso/70">
+                        {(o.order_items ?? []).map((item, i) => (
+                          <li key={i} className="flex justify-between gap-2">
+                            <span>
+                              {item.products?.nom ?? "Produit"}
+                              {item.product_variants?.parfum &&
+                                ` — ${item.product_variants.parfum}`}{" "}
+                              × {item.quantite}
+                            </span>
+                            <span className="shrink-0">
+                              {formatPrice(Number(item.prix) * item.quantite)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
                   </li>
                 ))}
               </ul>
