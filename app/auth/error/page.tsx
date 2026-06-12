@@ -1,5 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
+import { Flame } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Erreur de connexion",
+  robots: { index: false },
+};
 
 async function ErrorContent({
   searchParams,
@@ -9,17 +18,11 @@ async function ErrorContent({
   const params = await searchParams;
 
   return (
-    <>
-      {params?.error ? (
-        <p className="text-sm text-muted-foreground">
-          Code error: {params.error}
-        </p>
-      ) : (
-        <p className="text-sm text-muted-foreground">
-          An unspecified error occurred.
-        </p>
-      )}
-    </>
+    <p className="mt-3 text-sm leading-relaxed text-espresso/70">
+      {params?.error
+        ? `Détail : ${params.error}`
+        : "Une erreur inattendue est survenue."}
+    </p>
   );
 }
 
@@ -29,23 +32,25 @@ export default function Page({
   searchParams: Promise<{ error: string }>;
 }) {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">
-                Sorry, something went wrong.
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Suspense>
-                <ErrorContent searchParams={searchParams} />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
+    <main className="flex min-h-[70vh] w-full items-center justify-center bg-creme p-6 md:p-10">
+      <div className="w-full max-w-md rounded-lg bg-white p-8 text-center ring-1 ring-border">
+        <span className="mx-auto mb-4 inline-flex rounded-full bg-terracotta/10 p-4 text-terracotta">
+          <Flame className="size-7" />
+        </span>
+        <h1 className="font-serif text-2xl">
+          Oups, ce lien ne fonctionne plus
+        </h1>
+        <p className="mt-3 text-sm leading-relaxed text-espresso/70">
+          Les liens magiques expirent rapidement par sécurité. Pas
+          d&apos;inquiétude : demandez-en simplement un nouveau.
+        </p>
+        <Suspense>
+          <ErrorContent searchParams={searchParams} />
+        </Suspense>
+        <Button size="lg" className="mt-6" asChild>
+          <Link href="/auth/login">Recevoir un nouveau lien</Link>
+        </Button>
       </div>
-    </div>
+    </main>
   );
 }
