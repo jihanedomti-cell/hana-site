@@ -3,6 +3,7 @@ import { ShoppingBag, User } from "lucide-react";
 
 import { CartBadge } from "@/components/hana/cart-badge";
 import { Logo } from "@/components/hana/logo";
+import { MobileMenu } from "@/components/hana/mobile-menu";
 
 const links = [
   { href: "/boutique", label: "Boutique" },
@@ -15,7 +16,7 @@ const links = [
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-espresso/10 bg-creme/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-6 px-5 md:px-8">
+      <div className="relative mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-6 px-5 md:px-8">
         <Link href="/" aria-label="HANA — accueil" className="shrink-0">
           <Logo size="sm" className="md:text-2xl" />
         </Link>
@@ -39,7 +40,7 @@ export function Navbar() {
           <Link
             href="/compte"
             aria-label="Mon compte"
-            className="rounded-full p-2 text-espresso/75 transition-colors hover:bg-espresso/5 hover:text-terracotta"
+            className="hidden rounded-full p-2 text-espresso/75 transition-colors hover:bg-espresso/5 hover:text-terracotta md:inline-flex"
           >
             <User className="size-5" />
           </Link>
@@ -51,27 +52,9 @@ export function Navbar() {
             <ShoppingBag className="size-5" />
             <CartBadge />
           </Link>
+          <MobileMenu />
         </div>
       </div>
-
-      {/* Navigation mobile simplifiée */}
-      <nav
-        aria-label="Navigation principale mobile"
-        className="border-t border-espresso/5 md:hidden"
-      >
-        <ul className="flex items-center justify-center gap-6 px-4 py-2">
-          {links.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className="text-xs text-espresso/75 transition-colors hover:text-terracotta"
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </header>
   );
 }

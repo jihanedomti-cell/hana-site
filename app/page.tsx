@@ -13,6 +13,7 @@ import {
 import { NewsletterForm } from "@/components/hana/newsletter-form";
 import { PlaceholderImage } from "@/components/hana/placeholder-image";
 import { ProductCard } from "@/components/hana/product-card";
+import { Reveal } from "@/components/hana/reveal";
 import { Section } from "@/components/hana/section";
 import { Stars } from "@/components/hana/stars";
 import { Button } from "@/components/ui/button";
@@ -123,16 +124,18 @@ export default async function Home() {
       {/* ============ 3 PILIERS ============ */}
       <Section variant="white">
         <div className="grid gap-10 md:grid-cols-3">
-          {pillars.map((p) => (
-            <div key={p.title} className="text-center md:text-left">
-              <div className="mb-4 inline-flex rounded-full bg-creme p-3.5 text-terracotta">
-                <p.icon className="size-6" />
+          {pillars.map((p, i) => (
+            <Reveal key={p.title} delay={i * 120}>
+              <div className="text-center md:text-left">
+                <div className="mb-4 inline-flex rounded-full bg-creme p-3.5 text-terracotta">
+                  <p.icon className="size-6" />
+                </div>
+                <h2 className="font-serif text-xl">{p.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-espresso/70">
+                  {p.text}
+                </p>
               </div>
-              <h2 className="font-serif text-xl">{p.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-espresso/70">
-                {p.text}
-              </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -140,11 +143,13 @@ export default async function Home() {
       {/* ============ PRODUIT PHARE ============ */}
       <Section variant="creme">
         <div className="grid items-center gap-10 md:grid-cols-2">
-          <PlaceholderImage
-            palette="terracotta"
-            label="Fleur d'oranger"
-            className="rounded-lg shadow-lg shadow-espresso/10"
-          />
+          <Reveal>
+            <PlaceholderImage
+              palette="terracotta"
+              label="Fleur d'oranger"
+              className="rounded-lg shadow-lg shadow-espresso/10"
+            />
+          </Reveal>
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-terracotta">
               Le produit phare
@@ -184,17 +189,18 @@ export default async function Home() {
         id="comment-ca-marche"
       >
         <div className="grid gap-8 md:grid-cols-3">
-          {steps.map((s) => (
-            <div
-              key={s.num}
-              className="rounded-lg border border-creme/10 bg-creme/5 p-6"
-            >
-              <p className="font-serif text-4xl text-ambre/80">{s.num}</p>
-              <h3 className="mt-3 font-serif text-xl text-creme">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-creme/70">
-                {s.text}
-              </p>
-            </div>
+          {steps.map((s, i) => (
+            <Reveal key={s.num} delay={i * 150}>
+              <div className="h-full rounded-lg border border-creme/10 bg-creme/5 p-6">
+                <p className="font-serif text-4xl text-ambre/80">{s.num}</p>
+                <h3 className="mt-3 font-serif text-xl text-creme">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-creme/70">
+                  {s.text}
+                </p>
+              </div>
+            </Reveal>
           ))}
         </div>
         <div className="mt-10">
@@ -212,23 +218,25 @@ export default async function Home() {
         subtitle="Les préférées de nos clientes — bougies, recharges et coffrets."
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {bestSellers.map((p) => (
-            <ProductCard
-              key={p.slug}
-              slug={p.slug}
-              name={p.nom}
-              parfum={
-                p.parfums.length > 1
-                  ? `${p.parfums.length} parfums au choix`
-                  : p.parfums[0]
-              }
-              firstParfum={p.parfums[0]}
-              price={p.prix}
-              href={`/produit/${p.slug}`}
-              badge={p.badge}
-              palette={p.palette}
-              imageUrl={"imageUrl" in p ? p.imageUrl : undefined}
-            />
+          {bestSellers.map((p, i) => (
+            <Reveal key={p.slug} delay={i * 100} className="h-full">
+              <ProductCard
+                slug={p.slug}
+                name={p.nom}
+                parfum={
+                  p.parfums.length > 1
+                    ? `${p.parfums.length} parfums au choix`
+                    : p.parfums[0]
+                }
+                firstParfum={p.parfums[0]}
+                price={p.prix}
+                href={`/produit/${p.slug}`}
+                badge={p.badge}
+                palette={p.palette}
+                imageUrl={"imageUrl" in p ? p.imageUrl : undefined}
+                className="h-full"
+              />
+            </Reveal>
           ))}
         </div>
         <div className="mt-10 text-center">
@@ -245,19 +253,19 @@ export default async function Home() {
         title="Des moments qui durent"
       >
         <div className="grid gap-6 md:grid-cols-3">
-          {reviews.map((r) => (
-            <figure
-              key={r.prenom}
-              className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-border"
-            >
-              <Stars note={r.note} />
-              <blockquote className="mt-4 text-sm leading-relaxed text-espresso/80">
-                « {r.commentaire} »
-              </blockquote>
-              <figcaption className="mt-4 font-serif text-sm text-espresso">
-                {r.prenom} <span className="text-espresso/50">— {r.ville}</span>
-              </figcaption>
-            </figure>
+          {reviews.map((r, i) => (
+            <Reveal key={r.prenom} delay={i * 120} className="h-full">
+              <figure className="h-full rounded-lg bg-white p-6 shadow-sm ring-1 ring-border">
+                <Stars note={r.note} />
+                <blockquote className="mt-4 text-sm leading-relaxed text-espresso/80">
+                  « {r.commentaire} »
+                </blockquote>
+                <figcaption className="mt-4 font-serif text-sm text-espresso">
+                  {r.prenom}{" "}
+                  <span className="text-espresso/50">— {r.ville}</span>
+                </figcaption>
+              </figure>
+            </Reveal>
           ))}
         </div>
       </Section>

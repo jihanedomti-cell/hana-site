@@ -19,6 +19,29 @@ export const metadata: Metadata = {
   },
   description:
     "Certains moments méritent de ne jamais s'éteindre. HANA, bougies artisanales parfumées et rechargeables, fabriquées en France.",
+  keywords: [
+    "bougie rechargeable",
+    "bougie artisanale",
+    "bougie parfumée",
+    "fabriqué en France",
+    "recharge bougie",
+    "cire végétale",
+    "parfums de Grasse",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: "HANA",
+    title: "HANA — La bougie rechargeable, fabriquée en France",
+    description:
+      "Certains moments méritent de ne jamais s'éteindre. Bougies artisanales parfumées et rechargeables.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HANA — La bougie rechargeable",
+    description:
+      "Certains moments méritent de ne jamais s'éteindre. Bougies artisanales rechargeables, fabriquées en France.",
+  },
 };
 
 const inter = Inter({
