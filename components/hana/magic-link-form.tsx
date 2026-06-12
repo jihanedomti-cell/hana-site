@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { MailCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -8,11 +9,17 @@ import { createClient } from "@/lib/supabase/client";
 
 /**
  * Connexion sans mot de passe (magic link Supabase).
- * Le lien envoyé pointe vers /auth/confirm qui vérifie le token_hash
- * puis redirige vers /compte. Crée le compte au premier lien (et le
- * trigger SQL crée la ligne `profiles` automatiquement).
+ * Le lien envoyé pointe vers /auth/confirm qui vérifie le token/code
+ * puis redirige vers `next` (/compte par défaut, /checkout depuis le
+ * tunnel de commande). Crée le compte au premier lien (et le trigger
+ * SQL crée la ligne `profiles` automatiquement).
  */
 export function MagicLinkForm() {
+  const searchParams = useSearchParams();
+  // Sécurité anti open-redirect : uniquement des chemins internes
+  const rawNext = searchParams.get("next") ?? "/compte";
+  const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/compte";
+
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">(
     "idle",
@@ -28,7 +35,7 @@ export function MagicLinkForm() {
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim().toLowerCase(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/confirm?next=/compte`,
+        emailRedirectTo: `${window.location.origin}/auth/confirm?next=${encodeURIComponent(next)}`,
       },
     });
 
